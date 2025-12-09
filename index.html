@@ -3,113 +3,24 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard de Conferência v6 (Busca Destinatário)</title>
+    <title>DASHBOARD EXPEDIDO NÃO CHEGOU J&T</title>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <style>
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-            background-color: #f4f7fa;
-            color: #333;
-            margin: 0;
-            padding: 20px;
-        }
-        .container {
-            max-width: 1400px;
-            margin: 20px auto;
-            background-color: #ffffff;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
-            overflow: hidden;
-        }
-        h1, h2 {
-            text-align: center;
-            color: #1a253c;
-            padding: 0 20px;
-        }
-        h2 {
-            margin-top: 25px;
-            padding-bottom: 10px;
-            margin-left: 20px;
-            margin-right: 20px;
-            border-bottom: 1px solid #eee;
-        }
-        .filter-bar {
-            background-color: #ffffff;
-            padding: 20px;
-            border-bottom: 1px solid #e0e0e0;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-            align-items: flex-end;
-        }
-        .filter-group {
-            display: flex;
-            flex-direction: column;
-            flex: 1;
-            min-width: 250px;
-        }
-        .filter-group label {
-            font-weight: 600;
-            font-size: 13px;
-            margin-bottom: 5px;
-            color: #555;
-        }
-        .filter-group input[type="file"], 
-        .filter-group input[type="text"] {
-            padding: 8px;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            font-size: 13px;
-            background-color: #f9f9f9;
-            width: 100%;
-            box-sizing: border-box; /* Garante que o padding não aumente a largura */
-        }
-        #statusMessage {
-            width: 100%; 
-            margin-top: 10px;
-            font-size: 14px;
-            color: #555;
-        }
-        .dashboard-content {
-            padding: 20px;
-            overflow-x: auto;
-        }
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 10px;
-        }
-        th, td {
-            border: 1px solid #ddd;
-            padding: 12px;
-            text-align: left;
-            font-size: 14px;
-            white-space: nowrap;
-        }
-        th {
-            background-color: #f2f2f2;
-            font-weight: 600;
-        }
-        
-        /* Botões 3D */
-        .button-container {
-            display: flex;
-            gap: 10px;
-            margin-left: auto;
-            align-self: center;
-        }
-        .btn-3d {
-            padding: 10px 20px;
-            font-size: 14px;
-            font-weight: 600;
-            color: white;
-            border: none;
-            border-radius: 8px;
-            cursor: pointer;
-            text-shadow: 1px 1px 1px rgba(0,0,0,0.2);
-            transition: all 0.1s ease-in-out;
-            position: relative;
-        }
+        body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: #f4f7fa; color: #333; margin: 0; padding: 20px; }
+        .container { max-width: 1400px; margin: 20px auto; background-color: #ffffff; border-radius: 8px; box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05); overflow: hidden; }
+        h1, h2 { text-align: center; color: #1a253c; padding: 0 20px; }
+        h2 { margin-top: 25px; padding-bottom: 10px; margin-left: 20px; margin-right: 20px; border-bottom: 1px solid #eee; }
+        .filter-bar { background-color: #ffffff; padding: 20px; border-bottom: 1px solid #e0e0e0; display: flex; flex-wrap: wrap; gap: 20px; align-items: flex-end; }
+        .filter-group { display: flex; flex-direction: column; flex: 1; min-width: 250px; }
+        .filter-group label { font-weight: 600; font-size: 13px; margin-bottom: 5px; color: #555; }
+        .filter-group input[type="file"] { padding: 8px; border: 1px solid #ccc; border-radius: 6px; font-size: 13px; background-color: #f9f9f9; width: 100%; box-sizing: border-box; }
+        #statusMessage { width: 100%; margin-top: 10px; font-size: 14px; color: #555; font-weight: bold; }
+        .dashboard-content { padding: 20px; overflow-x: auto; }
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th, td { border: 1px solid #ddd; padding: 12px; text-align: left; font-size: 14px; white-space: nowrap; }
+        th { background-color: #f2f2f2; font-weight: 600; }
+        .button-container { display: flex; gap: 10px; margin-left: auto; align-self: center; }
+        .btn-3d { padding: 10px 20px; font-size: 14px; font-weight: 600; color: white; border: none; border-radius: 8px; cursor: pointer; text-shadow: 1px 1px 1px rgba(0,0,0,0.2); transition: all 0.1s ease-in-out; position: relative; }
         .btn-3d:disabled { opacity: 0.5; cursor: not-allowed; }
         .btn-apply { background-color: #007bff; border-bottom: 4px solid #0056b3; }
         .btn-apply:active:not(:disabled) { top: 2px; border-bottom-width: 2px; }
@@ -118,69 +29,20 @@
         .btn-copy { background-color: #6c757d; border-bottom: 4px solid #4a5056; width: 120px; flex-shrink: 0; }
         .btn-copy:active:not(:disabled) { top: 2px; border-bottom-width: 2px; }
         .btn-copied { background-color: #28a745; border-bottom-color: #1f8336; }
-        .btn-search { background-color: #17a2b8; border-bottom: 4px solid #117a8b; }
-        .btn-search:active:not(:disabled) { top: 2px; border-bottom-width: 2px; }
-
-        /* Cards */
-        .summary-cards-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 20px;
-            padding: 20px;
-            justify-content: center;
-        }
-        .summary-card {
-            flex-grow: 1;
-            min-width: 180px;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0,0,0,0.1);
-            text-align: center;
-            border: 1px solid #eee;
-        }
+        .summary-cards-container { display: flex; flex-wrap: wrap; gap: 20px; padding: 20px; justify-content: center; }
+        .summary-card { flex-grow: 1; min-width: 180px; padding: 20px; border-radius: 8px; box-shadow: 0 2px 5px rgba(0,0,0,0.1); text-align: center; border: 1px solid #eee; }
         .summary-card-title { font-size: 14px; font-weight: 600; color: #555; margin-bottom: 8px; }
         .summary-card-value { font-size: 28px; font-weight: 700; color: #333; }
         .summary-card.missing .summary-card-value { color: #dc3545; }
         .summary-card.driver .summary-card-value { color: #ffc107; }
-        
-        /* Container Header */
-        .container-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0 20px;
-        }
-        .container-header h2 {
-            border: none;
-            margin: 0;
-            flex-grow: 1;
-        }
+        .container-header { display: flex; justify-content: space-between; align-items: center; padding: 0 20px; }
+        .container-header h2 { border: none; margin: 0; flex-grow: 1; }
         .container-header .spacer { width: 120px; flex-shrink: 0; }
-
-        /* Estilos da Busca */
-        .search-section {
-            background-color: #e9ecef;
-            padding: 20px;
-            border-radius: 8px;
-            margin-bottom: 20px;
-            border: 1px solid #dee2e6;
-        }
-        .search-results {
-            margin-top: 15px;
-            max-height: 200px;
-            overflow-y: auto;
-            background: white;
-            border: 1px solid #ccc;
-            border-radius: 6px;
-            display: none; /* Escondido por padrão */
-        }
-        .search-results table { margin-top: 0; }
-        .search-results th { position: sticky; top: 0; }
     </style>
 </head>
 <body>
 
-    <h1>Dashboard de Conferência (Tripla Checagem)</h1>
+    <h1>DASHBOARD EXPEDIDO NÃO CHEGOU J&T</h1>
 
     <div class="container" style="margin-top: 0;">
         <div class="filter-bar">
@@ -196,7 +58,7 @@
             </div>
 
             <div class="filter-group">
-                <label for="fileInput3">3. Carta de Porte (Motoristas + Destinatários):</label>
+                <label for="fileInput3">3. Carta de Porte (Opcional):</label>
                 <input type="file" id="fileInput3" accept=".xlsx, .xls">
             </div>
 
@@ -209,33 +71,10 @@
         </div>
     </div>
 
-    <div class="container" id="searchContainer" style="display: none;">
-        <h2>Busca por Destinatário (Etiqueta Ilegível)</h2>
-        <div style="padding: 0 20px 20px 20px;">
-            <div style="display: flex; gap: 10px;">
-                <input type="text" id="recipientInput" placeholder="Digite o nome do destinatário para encontrar a remessa...">
-                <button id="searchButton" class="btn-3d btn-search">Buscar</button>
-            </div>
-            
-            <div id="searchResultsArea" class="search-results">
-                <table id="searchTable">
-                    <thead>
-                        <tr>
-                            <th>Remessa (Copie aqui)</th>
-                            <th>Destinatário</th>
-                            <th>Motorista</th>
-                        </tr>
-                    </thead>
-                    <tbody id="searchBody"></tbody>
-                </table>
-            </div>
-        </div>
-    </div>
-
     <div class="container">
         <h2>Resumo da Comparação</h2>
         <div id="overallSummaryContainer" class="summary-cards-container">
-            <p style="text-align: center; width: 100%;">Carregue os 3 arquivos e clique em "Comparar".</p>
+            <p style="text-align: center; width: 100%;">Carregue os arquivos (1 e 2 Obrigatórios) e clique em "Comparar".</p>
         </div>
     </div>
 
@@ -247,15 +86,8 @@
         </div>
         <div class="dashboard-content">
             <table id="driverTable">
-                <thead>
-                    <tr>
-                        <th>Remessa</th>
-                        <th>Motorista Responsável (Col E)</th>
-                    </tr>
-                </thead>
-                <tbody id="tableBodyDriver">
-                    <tr><td colspan="2" style="text-align: center;">Resultados aparecerão aqui.</td></tr>
-                </tbody>
+                <thead><tr><th>Remessa (15 Dígitos)</th><th>Motorista Responsável (Col E)</th></tr></thead>
+                <tbody id="tableBodyDriver"><tr><td colspan="2" style="text-align: center;">Resultados aparecerão aqui.</td></tr></tbody>
             </table>
         </div>
     </div>
@@ -263,19 +95,13 @@
     <div class="container">
         <div class="container-header">
             <button id="copyButtonMissing" class="btn-3d btn-copy" style="display: none;">Copiar Lista</button>
-            <h2 style="color: #dc3545;">Faltantes Reais (Nem Base, Nem Motorista)</h2>
+            <h2 style="color: #dc3545;">Expedido não chegou (Faltantes)</h2>
             <div class="spacer"></div>
         </div>
         <div class="dashboard-content">
             <table id="missingTable">
-                <thead>
-                    <tr>
-                        <th>Remessa Faltante</th>
-                    </tr>
-                </thead>
-                <tbody id="tableBodyMissing">
-                    <tr><td style="text-align: center;">Resultados aparecerão aqui.</td></tr>
-                </tbody>
+                <thead><tr><th>Remessa Faltante (15 Dígitos)</th></tr></thead>
+                <tbody id="tableBodyMissing"><tr><td style="text-align: center;">Resultados aparecerão aqui.</td></tr></tbody>
             </table>
         </div>
     </div>
@@ -283,370 +109,276 @@
     <div class="container">
         <div class="container-header">
             <button id="copyButtonUnexpected" class="btn-3d btn-copy" style="display: none;">Copiar Lista</button>
-            <h2>Sobras na Base (Não Esperados)</h2>
+            <h2>Recebidos sem Expedição do DC (Sobras)</h2>
             <div class="spacer"></div>
         </div>
         <div class="dashboard-content">
             <table id="unexpectedTable">
-                <thead>
-                    <tr>
-                        <th>Remessa Recebida</th>
-                    </tr>
-                </thead>
-                <tbody id="tableBodyUnexpected">
-                    <tr><td style="text-align: center;">Resultados aparecerão aqui.</td></tr>
-                </tbody>
+                <thead><tr><th>Remessa Recebida (15 Dígitos)</th></tr></thead>
+                <tbody id="tableBodyUnexpected"><tr><td style="text-align: center;">Resultados aparecerão aqui.</td></tr></tbody>
             </table>
         </div>
     </div>
 
     <script>
-        let missingItemsList = [];
-        let directToDriverList = [];
-        let unexpectedItemsList = [];
-        
-        // Armazena dados completos da Carta de Porte para a busca
-        let cartaPorteData = []; 
+        document.addEventListener('DOMContentLoaded', function() {
+            
+            // Variáveis Globais
+            let missingItemsList = [];
+            let directToDriverList = [];
+            let unexpectedItemsList = [];
 
-        // Elementos DOM
-        const fileInput1 = document.getElementById('fileInput1');
-        const fileInput2 = document.getElementById('fileInput2');
-        const fileInput3 = document.getElementById('fileInput3');
-        const compareButton = document.getElementById('compareButton');
-        const clearButton = document.getElementById('clearButton');
-        const statusMessage = document.getElementById('statusMessage');
-        const overallSummaryContainer = document.getElementById('overallSummaryContainer');
-        
-        const copyButtonDriver = document.getElementById('copyButtonDriver');
-        const tableBodyDriver = document.getElementById('tableBodyDriver');
-        const copyButtonMissing = document.getElementById('copyButtonMissing');
-        const tableBodyMissing = document.getElementById('tableBodyMissing');
-        const copyButtonUnexpected = document.getElementById('copyButtonUnexpected');
-        const tableBodyUnexpected = document.getElementById('tableBodyUnexpected');
+            // Elementos DOM
+            const fileInput1 = document.getElementById('fileInput1');
+            const fileInput2 = document.getElementById('fileInput2');
+            const fileInput3 = document.getElementById('fileInput3');
+            const compareButton = document.getElementById('compareButton');
+            const clearButton = document.getElementById('clearButton');
+            const statusMessage = document.getElementById('statusMessage');
+            const overallSummaryContainer = document.getElementById('overallSummaryContainer');
+            
+            const copyButtonDriver = document.getElementById('copyButtonDriver');
+            const tableBodyDriver = document.getElementById('tableBodyDriver');
+            const copyButtonMissing = document.getElementById('copyButtonMissing');
+            const tableBodyMissing = document.getElementById('tableBodyMissing');
+            const copyButtonUnexpected = document.getElementById('copyButtonUnexpected');
+            const tableBodyUnexpected = document.getElementById('tableBodyUnexpected');
 
-        // Elementos de Busca
-        const searchContainer = document.getElementById('searchContainer');
-        const recipientInput = document.getElementById('recipientInput');
-        const searchButton = document.getElementById('searchButton');
-        const searchResultsArea = document.getElementById('searchResultsArea');
-        const searchBody = document.getElementById('searchBody');
-
-        // Event Listeners
-        compareButton.addEventListener('click', handleCompare);
-        clearButton.addEventListener('click', handleClear);
-        searchButton.addEventListener('click', handleSearch);
-        
-        // Permite buscar apertando Enter
-        recipientInput.addEventListener('keypress', function (e) {
-            if (e.key === 'Enter') handleSearch();
-        });
-        
-        copyButtonMissing.addEventListener('click', () => handleCopy(missingItemsList, copyButtonMissing));
-        copyButtonDriver.addEventListener('click', () => {
-            const listToCopy = directToDriverList.map(item => `${item.remessa} - ${item.motorista}`);
-            handleCopy(listToCopy, copyButtonDriver);
-        });
-        copyButtonUnexpected.addEventListener('click', () => handleCopy(unexpectedItemsList, copyButtonUnexpected));
-
-        /**
-         * Helper: Filtra remessas válidas
-         */
-        function filterRemessa(remessa) {
-            if (!remessa) return null;
-            if (typeof remessa === 'number') remessa = String(remessa);
-            if (typeof remessa !== 'string') return null;
-            remessa = remessa.trim();
-            if (remessa.length === 15 && !remessa.toLowerCase().startsWith('br')) {
-                return remessa;
-            }
-            return null;
-        }
-
-        function handleCompare() {
-            const file1 = fileInput1.files[0];
-            const file2 = fileInput2.files[0];
-            const file3 = fileInput3.files[0];
-
-            if (!file1 || !file2 || !file3) {
-                statusMessage.textContent = "Por favor, carregue os TRÊS arquivos.";
-                statusMessage.style.color = "red";
-                return;
-            }
-
-            statusMessage.textContent = "Lendo arquivos... aguarde.";
-            statusMessage.style.color = "orange";
-            compareButton.disabled = true;
-
-            Promise.all([
-                readExcelFile(file1), // Monitoramento
-                readExcelFile(file2), // Consulta
-                readExcelFile(file3)  // Carta de Porte
-            ])
-            .then(([rows1, rows2, rows3]) => {
-                statusMessage.textContent = "Comparando dados...";
-                
-                setTimeout(() => {
-                    try {
-                        // 1. Processa Monitoramento
-                        const monitoramentoSet = new Set();
-                        for (const row of rows1) {
-                            const r = filterRemessa(row[0]);
-                            if (r) monitoramentoSet.add(r);
-                        }
-
-                        // 2. Processa Consulta
-                        const consultaSet = new Set();
-                        for (const row of rows2) {
-                            const r = filterRemessa(row[0]);
-                            if (r) consultaSet.add(r);
-                        }
-
-                        // 3. Processa Carta de Porte (Com Motoristas e Destinatários)
-                        const driverMap = new Map();
-                        cartaPorteData = []; // Limpa dados anteriores
-
-                        for (const row of rows3) {
-                            const r = filterRemessa(row[0]); // Col A (Remessa)
-                            const motorista = row[4]; // Col E (Motorista)
-                            const destinatario = row[21]; // Col V (Destinatário - Index 21)
-
-                            if (r) {
-                                if (motorista) driverMap.set(r, motorista);
-                                
-                                // Salva para a busca (mesmo se motorista for vazio, pode ter destinatário)
-                                cartaPorteData.push({
-                                    remessa: r,
-                                    motorista: motorista || 'Não informado',
-                                    destinatario: destinatario || ''
-                                });
-                            }
-                        }
-
-                        // --- COMPARAÇÃO ---
-                        missingItemsList = [];
-                        directToDriverList = [];
-                        unexpectedItemsList = [];
-
-                        // Faltantes e Direto p/ Motorista
-                        for (const remessa of monitoramentoSet) {
-                            if (!consultaSet.has(remessa)) {
-                                if (driverMap.has(remessa)) {
-                                    directToDriverList.push({
-                                        remessa: remessa,
-                                        motorista: driverMap.get(remessa)
-                                    });
-                                } else {
-                                    missingItemsList.push(remessa);
-                                }
-                            }
-                        }
-                        
-                        // Sobras
-                        for (const remessa of consultaSet) {
-                            if (!monitoramentoSet.has(remessa)) {
-                                unexpectedItemsList.push(remessa);
-                            }
-                        }
-                        
-                        // Renderiza
-                        renderSummaryCards(monitoramentoSet.size, consultaSet.size, missingItemsList.length, directToDriverList.length, unexpectedItemsList.length);
-                        renderDriverTable(directToDriverList);
-                        renderMissingTable(missingItemsList);
-                        renderUnexpectedTable(unexpectedItemsList);
-                        
-                        // Habilita a busca
-                        searchContainer.style.display = 'block';
-                        
-                        statusMessage.textContent = `Conferência concluída. Use a busca acima para encontrar destinatários.`;
-                        statusMessage.style.color = "green";
-                        
-                        copyButtonDriver.style.display = (directToDriverList.length > 0) ? 'block' : 'none';
-                        copyButtonMissing.style.display = (missingItemsList.length > 0) ? 'block' : 'none';
-                        copyButtonUnexpected.style.display = (unexpectedItemsList.length > 0) ? 'block' : 'none';
-
-                    } catch (err) {
-                        statusMessage.textContent = `Erro ao comparar: ${err.message}`;
-                        statusMessage.style.color = "red";
-                    } finally {
-                        compareButton.disabled = false;
-                    }
-                }, 50);
-            })
-            .catch(err => {
-                statusMessage.textContent = `Erro ao ler arquivo: ${err.message}`;
-                statusMessage.style.color = "red";
-                compareButton.disabled = false;
+            // Event Listeners
+            if(compareButton) compareButton.addEventListener('click', handleCompare);
+            if(clearButton) clearButton.addEventListener('click', handleClear);
+            
+            if(copyButtonMissing) copyButtonMissing.addEventListener('click', () => handleCopy(missingItemsList, copyButtonMissing));
+            if(copyButtonDriver) copyButtonDriver.addEventListener('click', () => {
+                const listToCopy = directToDriverList.map(item => `${item.remessa} - ${item.motorista}`);
+                handleCopy(listToCopy, copyButtonDriver);
             });
-        }
+            if(copyButtonUnexpected) copyButtonUnexpected.addEventListener('click', () => handleCopy(unexpectedItemsList, copyButtonUnexpected));
 
-        /**
-         * NOVA FUNÇÃO: Busca por Destinatário
-         */
-        function handleSearch() {
-            const searchTerm = recipientInput.value.trim().toLowerCase();
-            
-            if (searchTerm.length < 3) {
-                alert("Digite pelo menos 3 letras para buscar.");
-                return;
-            }
-
-            if (cartaPorteData.length === 0) {
-                alert("Carregue o arquivo de Carta de Porte primeiro!");
-                return;
-            }
-
-            // Filtra os dados
-            const results = cartaPorteData.filter(item => 
-                item.destinatario && item.destinatario.toLowerCase().includes(searchTerm)
-            );
-
-            searchBody.innerHTML = '';
-            
-            if (results.length === 0) {
-                searchBody.innerHTML = '<tr><td colspan="3" style="text-align: center;">Nenhum destinatário encontrado com esse nome.</td></tr>';
-            } else {
-                for (const item of results) {
-                    searchBody.innerHTML += `
-                        <tr>
-                            <td style="font-weight: bold; color: #007bff;">${item.remessa}</td>
-                            <td>${item.destinatario}</td>
-                            <td>${item.motorista}</td>
-                        </tr>
-                    `;
+            // Função Principal de Comparação
+            function handleCompare() {
+                // Verificação da Biblioteca
+                if (typeof XLSX === 'undefined') {
+                    alert("Erro: A biblioteca XLSX não carregou. Verifique sua conexão com a internet.");
+                    return;
                 }
-            }
-            searchResultsArea.style.display = 'block';
-        }
 
-        function handleClear() {
-            fileInput1.value = null;
-            fileInput2.value = null;
-            fileInput3.value = null;
-            missingItemsList = [];
-            directToDriverList = [];
-            unexpectedItemsList = [];
-            cartaPorteData = [];
-            
-            statusMessage.textContent = "Aguardando arquivos...";
-            statusMessage.style.color = "#555";
-            
-            searchContainer.style.display = 'none';
-            recipientInput.value = '';
-            searchResultsArea.style.display = 'none';
-            
-            [copyButtonDriver, copyButtonMissing, copyButtonUnexpected].forEach(btn => {
-                btn.style.display = 'none';
-                btn.textContent = 'Copiar Lista';
-                btn.classList.remove('btn-copied');
-            });
+                const file1 = fileInput1.files[0];
+                const file2 = fileInput2.files[0];
+                const file3 = fileInput3.files ? fileInput3.files[0] : null;
 
-            overallSummaryContainer.innerHTML = '<p style="text-align: center; width: 100%;">Carregue os arquivos e clique em "Comparar".</p>';
-            tableBodyDriver.innerHTML = '<tr><td colspan="2" style="text-align: center;">Resultados aparecerão aqui.</td></tr>';
-            tableBodyMissing.innerHTML = '<tr><td style="text-align: center;">Resultados aparecerão aqui.</td></tr>';
-            tableBodyUnexpected.innerHTML = '<tr><td style="text-align: center;">Resultados aparecerão aqui.</td></tr>';
-        }
-        
-        function handleCopy(list, button) {
-            if (list.length > 0) {
-                const textToCopy = list.join('\n');
-                navigator.clipboard.writeText(textToCopy).then(() => {
-                    button.textContent = 'Copiado!';
-                    button.classList.add('btn-copied');
-                    statusMessage.textContent = `Copiado para área de transferência.`;
-                    statusMessage.style.color = "blue";
-
-                    setTimeout(() => {
-                        button.textContent = 'Copiar Lista';
-                        button.classList.remove('btn-copied');
-                    }, 2000);
-                    
-                }, (err) => {
-                    statusMessage.textContent = `Falha ao copiar: ${err.message}`;
+                if (!file1 || !file2) {
+                    statusMessage.textContent = "ERRO: Carregue os arquivos 1 e 2 obrigatoriamente.";
                     statusMessage.style.color = "red";
+                    alert("Por favor, carregue os arquivos 1 e 2.");
+                    return;
+                }
+
+                statusMessage.textContent = "Processando arquivos... (Filtrando apenas 15 dígitos numéricos)";
+                statusMessage.style.color = "blue";
+                compareButton.disabled = true;
+                compareButton.textContent = "Processando...";
+
+                const promises = [
+                    readExcelFile(file1), // 0: Monitoramento
+                    readExcelFile(file2)  // 1: Consulta
+                ];
+
+                if (file3) {
+                    promises.push(readExcelFile(file3)); // 2: Carta de Porte
+                } else {
+                    promises.push(Promise.resolve([]));
+                }
+
+                Promise.all(promises)
+                .then(([rows1, rows2, rows3]) => {
+                    setTimeout(() => {
+                        try {
+                            processData(rows1, rows2, rows3);
+                            statusMessage.textContent = "Conferência Completa. (BRs ignorados, apenas 15 dígitos)";
+                            statusMessage.style.color = "green";
+                        } catch (err) {
+                            console.error(err);
+                            statusMessage.textContent = "Erro na lógica: " + err.message;
+                            statusMessage.style.color = "red";
+                        } finally {
+                            compareButton.disabled = false;
+                            compareButton.textContent = "Comparar";
+                        }
+                    }, 100);
+                })
+                .catch(err => {
+                    console.error(err);
+                    statusMessage.textContent = "Erro ao ler arquivos excel: " + err.message;
+                    statusMessage.style.color = "red";
+                    compareButton.disabled = false;
+                    compareButton.textContent = "Comparar";
                 });
             }
-        }
-        
-        function renderSummaryCards(monitTotal, consTotal, missTotal, driverTotal, unexpTotal) {
-            overallSummaryContainer.innerHTML = `
-                <div class="summary-card">
-                    <div class="summary-card-title">Expedidos</div>
-                    <div class="summary-card-value">${monitTotal}</div>
-                </div>
-                <div class="summary-card">
-                    <div class="summary-card-title">Bipados na Base</div>
-                    <div class="summary-card-value">${consTotal}</div>
-                </div>
-                <div class="summary-card driver">
-                    <div class="summary-card-title">Direto p/ Motorista</div>
-                    <div class="summary-card-value">${driverTotal}</div>
-                </div>
-                <div class="summary-card missing">
-                    <div class="summary-card-title">Faltantes Reais</div>
-                    <div class="summary-card-value">${missTotal}</div>
-                </div>
-                <div class="summary-card">
-                    <div class="summary-card-title">Sobras</div>
-                    <div class="summary-card-value">${unexpTotal}</div>
-                </div>
-            `;
-        }
-        
-        function renderDriverTable(items) {
-            if (items.length === 0) {
-                tableBodyDriver.innerHTML = '<tr><td colspan="2" style="text-align: center; color: green;">Nenhum item pulou a bipagem.</td></tr>';
-                return;
-            }
-            let html = '';
-            for (const item of items) {
-                html += `<tr><td>${item.remessa}</td><td>${item.motorista}</td></tr>`;
-            }
-            tableBodyDriver.innerHTML = html;
-        }
 
-        function renderMissingTable(items) {
-            if (items.length === 0) {
-                tableBodyMissing.innerHTML = '<tr><td style="text-align: center; color: green;">Nada faltando!</td></tr>';
-                return;
-            }
-            let html = '';
-            for (const item of items) html += `<tr><td>${item}</td></tr>`;
-            tableBodyMissing.innerHTML = html;
-        }
+            // Lógica de Negócio
+            function processData(rows1, rows2, rows3) {
+                // 1. Sets de dados simples (Usando a nova normalização)
+                const monitoramentoSet = new Set();
+                rows1.forEach(row => { const r = filterRemessa(row[0]); if(r) monitoramentoSet.add(r); });
 
-        function renderUnexpectedTable(items) {
-            if (items.length === 0) {
-                tableBodyUnexpected.innerHTML = '<tr><td style="text-align: center; color: green;">Nenhuma sobra.</td></tr>';
-                return;
-            }
-            let html = '';
-            for (const item of items) html += `<tr><td>${item}</td></tr>`;
-            tableBodyUnexpected.innerHTML = html;
-        }
+                const consultaSet = new Set();
+                rows2.forEach(row => { const r = filterRemessa(row[0]); if(r) consultaSet.add(r); });
 
-        function readExcelFile(file) {
-            return new Promise((resolve, reject) => {
-                const reader = new FileReader();
-                reader.onload = (e) => {
-                    setTimeout(() => {
+                // 2. Mapa de Motoristas
+                const driverMap = new Map();
+                
+                if (rows3 && rows3.length > 0) {
+                    rows3.forEach(row => {
+                        const r = filterRemessa(row[0]);
+                        const motorista = row[4] || 'Não informado';
+                        
+                        if (r) {
+                            driverMap.set(r, motorista);
+                        }
+                    });
+                }
+
+                // 3. Cruzamento
+                missingItemsList = [];
+                directToDriverList = [];
+                unexpectedItemsList = [];
+
+                // Quem estava no monitoramento (1) mas não bipou na base (2)?
+                monitoramentoSet.forEach(remessa => {
+                    if (!consultaSet.has(remessa)) {
+                        // Está com motorista (3)?
+                        if (driverMap.has(remessa)) {
+                            directToDriverList.push({ remessa: remessa, motorista: driverMap.get(remessa) });
+                        } else {
+                            // Não está com motorista (ou arquivo 3 não foi enviado) -> Faltante Real
+                            missingItemsList.push(remessa);
+                        }
+                    }
+                });
+
+                // Sobras (Estão no arquivo 2 mas não no 1)
+                consultaSet.forEach(remessa => {
+                    if (!monitoramentoSet.has(remessa)) unexpectedItemsList.push(remessa);
+                });
+
+                // Renderização
+                renderSummaryCards(monitoramentoSet.size, consultaSet.size, missingItemsList.length, directToDriverList.length, unexpectedItemsList.length);
+                renderDriverTable(directToDriverList, rows3.length > 0);
+                renderMissingTable(missingItemsList);
+                renderUnexpectedTable(unexpectedItemsList);
+                
+                // Botões de Cópia
+                copyButtonDriver.style.display = directToDriverList.length > 0 ? 'block' : 'none';
+                copyButtonMissing.style.display = missingItemsList.length > 0 ? 'block' : 'none';
+                copyButtonUnexpected.style.display = unexpectedItemsList.length > 0 ? 'block' : 'none';
+            }
+
+            // --- NOVA FUNÇÃO DE FILTRO RESTRITA ---
+            function filterRemessa(remessa) {
+                if (!remessa) return null;
+                if (typeof remessa === 'number') remessa = String(remessa);
+                if (typeof remessa !== 'string') return null;
+                
+                remessa = remessa.trim().toUpperCase();
+
+                // 1. REJEITAR SE COMEÇAR COM "BR"
+                if (remessa.startsWith('BR')) {
+                    return null;
+                }
+
+                // 2. PEGAR APENAS OS PRIMEIROS 15 CARACTERES
+                // (Ignora sufixos como -001, -002, etc)
+                if (remessa.length >= 15) {
+                    remessa = remessa.substring(0, 15);
+                }
+
+                // 3. VALIDAR SE SÃO EXATAMENTE 15 DÍGITOS NUMÉRICOS
+                // O regex abaixo verifica:
+                // ^      -> Começo da string
+                // \d{15} -> Exatamente 15 números (0-9)
+                // $      -> Fim da string
+                if (!/^\d{15}$/.test(remessa)) {
+                    return null; // Se tiver letra ou tamanho diferente de 15, ignora
+                }
+
+                return remessa;
+            }
+
+            function readExcelFile(file) {
+                return new Promise((resolve, reject) => {
+                    const reader = new FileReader();
+                    reader.onload = (e) => {
                         try {
                             const data = e.target.result;
                             const workbook = XLSX.read(data, { type: 'binary' });
                             const firstSheetName = workbook.SheetNames[0];
                             const worksheet = workbook.Sheets[firstSheetName];
-                            const rows = XLSX.utils.sheet_to_json(worksheet, { 
-                                header: 1, range: 1, defval: ""
-                            });
+                            const rows = XLSX.utils.sheet_to_json(worksheet, { header: 1, defval: "" });
                             resolve(rows);
                         } catch (err) {
-                            reject(new Error(`Falha ao processar ${file.name}: ${err.message}`));
+                            reject(err);
                         }
-                    }, 0);
-                };
-                reader.onerror = (err) => reject(new Error(`Falha ao ler ${file.name}`));
-                reader.readAsBinaryString(file);
-            });
-        }
+                    };
+                    reader.onerror = (err) => reject(err);
+                    reader.readAsBinaryString(file);
+                });
+            }
+
+            function renderSummaryCards(monit, cons, miss, driv, unexp) {
+                overallSummaryContainer.innerHTML = `
+                    <div class="summary-card"><div class="summary-card-title">Expedidos no DC</div><div class="summary-card-value">${monit}</div></div>
+                    <div class="summary-card"><div class="summary-card-title">Bipados na Base</div><div class="summary-card-value">${cons}</div></div>
+                    <div class="summary-card driver"><div class="summary-card-title">Direto p/ Motorista</div><div class="summary-card-value">${driv}</div></div>
+                    <div class="summary-card missing"><div class="summary-card-title">Expedido não chegou</div><div class="summary-card-value">${miss}</div></div>
+                    <div class="summary-card"><div class="summary-card-title">Recebidos sem Expedição do DC</div><div class="summary-card-value">${unexp}</div></div>
+                `;
+            }
+
+            function renderDriverTable(items, hasFile3) {
+                if (items.length === 0) {
+                    const msg = hasFile3 ? "Nenhum item pulou a bipagem." : "Arquivo de motoristas não carregado (Tudo foi para 'Expedido não chegou').";
+                    tableBodyDriver.innerHTML = `<tr><td colspan="2" style="text-align: center; color: #777;">${msg}</td></tr>`;
+                    return;
+                }
+                let html = items.map(i => `<tr><td>${i.remessa}</td><td>${i.motorista}</td></tr>`).join('');
+                tableBodyDriver.innerHTML = html;
+            }
+
+            function renderMissingTable(items) {
+                if (items.length === 0) {
+                    tableBodyMissing.innerHTML = '<tr><td style="text-align: center; color: green;">Nada faltando!</td></tr>';
+                    return;
+                }
+                let html = items.map(i => `<tr><td>${i}</td></tr>`).join('');
+                tableBodyMissing.innerHTML = html;
+            }
+
+            function renderUnexpectedTable(items) {
+                if (items.length === 0) {
+                    tableBodyUnexpected.innerHTML = '<tr><td style="text-align: center; color: green;">Nenhuma sobra.</td></tr>';
+                    return;
+                }
+                let html = items.map(i => `<tr><td>${i}</td></tr>`).join('');
+                tableBodyUnexpected.innerHTML = html;
+            }
+
+            function handleCopy(list, btn) {
+                if (!list.length) return;
+                const text = list.join('\n');
+                navigator.clipboard.writeText(text).then(() => {
+                    const original = btn.textContent;
+                    btn.textContent = "Copiado!";
+                    btn.classList.add('btn-copied');
+                    setTimeout(() => { btn.textContent = original; btn.classList.remove('btn-copied'); }, 2000);
+                });
+            }
+
+            function handleClear() {
+                location.reload();
+            }
+
+        });
     </script>
 </body>
 </html>
