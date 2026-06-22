@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard | Conferência de Expedição J&T</title>
+    <title>Dashboard | Conferência e Investigação J&T</title>
     
     <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
     <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -25,6 +25,11 @@
             --danger-light: #fef2f2;
             --warning: #f59e0b;
             --success: #10b981;
+            --info: #3b82f6;
+            --orange: #f97316;
+            --purple: #8b5cf6;
+            --purple-dark: #6b21a8;
+            --purple-light: #f3e8ff;
             
             --text-main: #1e293b;
             --text-muted: #64748b;
@@ -45,13 +50,13 @@
         h1, h2 { font-weight: 600; color: var(--text-main); }
         .container { max-width: 1400px; margin: 0 auto 24px; }
 
-        .page-header { display: flex; align-items: center; gap: 12px; margin-bottom: 32px; }
+        .page-header { display: flex; align-items: center; gap: 12px; margin-bottom: 24px; }
         .page-header i { font-size: 32px; color: var(--primary); }
         
         .status-badge {
             display: inline-flex; align-items: center; gap: 8px; padding: 12px 16px; border-radius: var(--radius-md);
             font-size: 14px; font-weight: 500; background: var(--bg-surface); border: 1px solid var(--border-color);
-            box-shadow: var(--shadow-sm); width: 100%; transition: var(--transition);
+            box-shadow: var(--shadow-sm); width: 100%; transition: var(--transition); margin-bottom: 24px;
         }
 
         /* UPLOADS */
@@ -64,9 +69,10 @@
         .file-dropzone:hover { border-color: var(--primary); background-color: #f0f7ff; }
         .file-dropzone i { font-size: 28px; color: var(--secondary); transition: var(--transition); }
         .file-dropzone:hover i { color: var(--primary); }
+        .file-dropzone.optional i { color: #94a3b8; }
         .file-dropzone input[type="file"] { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; }
         .dropzone-title { font-size: 14px; font-weight: 600; }
-        .dropzone-filename { font-size: 12px; color: var(--text-muted); }
+        .dropzone-filename { font-size: 12px; color: var(--text-muted); word-break: break-all; }
 
         /* BOTOES */
         .actions-bar { display: flex; justify-content: flex-end; gap: 12px; border-top: 1px solid var(--border-color); padding-top: 20px; }
@@ -75,11 +81,11 @@
         .btn-primary { background-color: var(--primary); color: white; box-shadow: 0 2px 4px rgba(0, 86, 179, 0.2); }
         .btn-primary:hover:not(:disabled) { background-color: var(--primary-hover); transform: translateY(-1px); }
         .btn-secondary { background-color: var(--bg-body); border: 1px solid var(--border-color); }
-        .btn-action { padding: 6px 12px; font-size: 12px; background-color: var(--secondary); color: white; }
+        .btn-action { padding: 6px 12px; font-size: 12px; background-color: var(--secondary); color: white; border: none; border-radius: 4px; cursor: pointer; display: flex; align-items: center; gap: 6px;}
         .btn-action:hover { background-color: var(--secondary-hover); }
 
         /* CARDS RESUMO */
-        .summary-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 20px; margin-bottom: 32px; align-items: center; }
+        .summary-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 32px; align-items: stretch; }
         .stat-card {
             background: var(--bg-surface); border-radius: var(--radius-lg); padding: 20px;
             box-shadow: var(--shadow-sm); border: 1px solid var(--border-color); position: relative; overflow: hidden;
@@ -89,70 +95,87 @@
         .stat-card.primary::before { background-color: var(--primary); }
         .stat-card.warning::before { background-color: var(--warning); }
         .stat-card.success::before { background-color: var(--success); }
+        .stat-card.info::before { background-color: var(--info); }
+        .stat-card.orange::before { background-color: var(--orange); }
+        .stat-card.danger::before { background-color: var(--danger); }
+        .stat-card.purple::before { background-color: var(--purple); }
         
         .stat-header { display: flex; align-items: center; gap: 8px; font-size: 12px; font-weight: 600; color: var(--text-muted); margin-bottom: 8px; text-transform: uppercase; }
         .stat-value { font-size: 28px; font-weight: 700; color: var(--text-main); line-height: 1; }
 
-        /* 🚨 ALERTA MÁXIMO: EXPEDIDO NÃO CHEGOU 🚨 */
-        @keyframes pulse-red {
-            0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.5); }
-            70% { box-shadow: 0 0 0 15px rgba(239, 68, 68, 0); }
-            100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
-        }
-        @keyframes blink-text {
-            0%, 100% { color: var(--danger-dark); }
-            50% { color: #ff8a8a; }
-        }
+        /* 🚨 ALERTAS MÁXIMOS (VERMELHO E ROXO) 🚨 */
+        @keyframes pulse-red { 0% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.5); } 70% { box-shadow: 0 0 0 15px rgba(239, 68, 68, 0); } 100% { box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); } }
+        @keyframes blink-text { 0%, 100% { color: var(--danger-dark); } 50% { color: #ff8a8a; } }
+        
+        @keyframes pulse-purple { 0% { box-shadow: 0 0 0 0 rgba(139, 92, 246, 0.5); } 70% { box-shadow: 0 0 0 15px rgba(139, 92, 246, 0); } 100% { box-shadow: 0 0 0 0 rgba(139, 92, 246, 0); } }
+        @keyframes blink-text-purple { 0%, 100% { color: var(--purple-dark); } 50% { color: #a855f7; } }
 
-        .stat-card.critical {
-            border: 2px solid var(--danger);
-            background-color: var(--danger-light);
-            transform: scale(1.08); /* Fica maior que os outros */
-            box-shadow: var(--shadow-lg);
-            z-index: 10;
-        }
+        /* Faltantes Críticos */
+        .stat-card.critical { border: 2px solid var(--danger); background-color: var(--danger-light); transform: scale(1.05); box-shadow: var(--shadow-lg); z-index: 10; }
         .stat-card.critical::before { background-color: var(--danger); width: 6px; }
         .stat-card.critical .stat-header { color: var(--danger-dark); font-size: 14px; font-weight: 700; }
-        .stat-card.critical .stat-value { font-size: 42px; } /* Número gigante */
+        .stat-card.critical .stat-value { font-size: 42px; }
+        .stat-card.critical.active-alert { animation: pulse-red 2s infinite; }
+        .stat-card.critical.active-alert .stat-value { animation: blink-text 1.5s infinite; }
 
-        /* Classe ativada via JS apenas se houver faltantes */
-        .stat-card.critical.active-alert {
-            animation: pulse-red 2s infinite;
-        }
-        .stat-card.critical.active-alert .stat-value {
-            animation: blink-text 1.5s infinite;
-        }
+        /* Sumiu no HUB */
+        .stat-card.purple-critical { border: 2px solid var(--purple); background-color: var(--purple-light); transform: scale(1.05); box-shadow: var(--shadow-lg); z-index: 10; }
+        .stat-card.purple-critical::before { background-color: var(--purple); width: 6px; }
+        .stat-card.purple-critical .stat-header { color: var(--purple-dark); font-size: 14px; font-weight: 700; }
+        .stat-card.purple-critical .stat-value { font-size: 42px; color: var(--purple-dark); }
+        .stat-card.purple-critical.active-alert { animation: pulse-purple 2s infinite; }
+        .stat-card.purple-critical.active-alert .stat-value { animation: blink-text-purple 1.5s infinite; }
 
         /* TABELAS */
         .table-grid { display: grid; gap: 24px; }
         .table-section { background: var(--bg-surface); border-radius: var(--radius-lg); box-shadow: var(--shadow-md); border: 1px solid var(--border-color); overflow: hidden; display: flex; flex-direction: column; }
-        .table-header { display: flex; justify-content: space-between; align-items: center; padding: 16px 24px; border-bottom: 1px solid var(--border-color); background-color: #fafafa; }
-        .table-header h2 { font-size: 16px; display: flex; align-items: center; gap: 8px; }
+        .table-header { display: flex; justify-content: space-between; align-items: center; padding: 16px 24px; border-bottom: 1px solid var(--border-color); background-color: #fafafa; flex-wrap: wrap; gap: 12px;}
+        .table-header h2 { font-size: 16px; display: flex; align-items: center; gap: 8px; margin: 0;}
         
-        /* Tabela de Faltantes Destacada */
         .table-section.critical-table { border: 2px solid var(--danger); }
-        .table-section.critical-table .table-header { background-color: var(--danger); color: white; }
+        .table-section.critical-table .table-header { background-color: var(--danger); color: white; border-bottom: none;}
         .table-section.critical-table .table-header h2 { color: white; }
         .table-section.critical-table .btn-action { background-color: rgba(255,255,255,0.2); color: white; border: 1px solid rgba(255,255,255,0.5); }
         .table-section.critical-table .btn-action:hover { background-color: white; color: var(--danger); }
 
+        .table-section.purple-table { border: 2px solid var(--purple); }
+        .table-section.purple-table .table-header { background-color: var(--purple); color: white; border-bottom: none;}
+        .table-section.purple-table .table-header h2 { color: white; }
+        .table-section.purple-table .btn-action { background-color: rgba(255,255,255,0.2); color: white; border: 1px solid rgba(255,255,255,0.5); }
+        .table-section.purple-table .btn-action:hover { background-color: white; color: var(--purple); }
+        
+        .table-section.investigation-table .table-header { background-color: var(--text-main); color: white; }
+        .table-section.investigation-table .table-header h2 { color: white; }
+
         .table-container { max-height: 400px; overflow-y: auto; }
         table { width: 100%; border-collapse: collapse; text-align: left; }
         th { position: sticky; top: 0; background-color: var(--bg-surface); padding: 12px 24px; font-size: 12px; font-weight: 600; color: var(--text-muted); border-bottom: 2px solid var(--border-color); z-index: 10; }
-        td { padding: 12px 24px; font-size: 14px; border-bottom: 1px solid var(--border-color); font-family: monospace; }
+        td { padding: 12px 24px; font-size: 13px; border-bottom: 1px solid var(--border-color); }
+        .td-mono { font-family: monospace; font-size: 14px; font-weight: 600; }
         tbody tr:hover { background-color: var(--bg-body); }
         .empty-state { text-align: center; padding: 40px 20px; color: var(--text-muted); font-size: 14px; display: flex; flex-direction: column; align-items: center; gap: 12px; }
+
+        /* FILTROS E BADGES (INVESTIGAÇÃO) */
+        .filters-bar { display: flex; gap: 8px; padding: 12px 24px; background: #f8fafc; border-bottom: 1px solid var(--border-color); flex-wrap: wrap; }
+        .filter-btn { padding: 6px 14px; font-size: 12px; font-weight: 600; border-radius: 20px; border: 1px solid var(--border-color); background: var(--bg-surface); color: var(--text-muted); cursor: pointer; transition: var(--transition); }
+        .filter-btn:hover { background: var(--bg-body); }
+        .filter-btn.active { background: var(--text-main); color: white; border-color: var(--text-main); }
+        
+        .status-badge-inline { display: inline-block; padding: 4px 8px; border-radius: 4px; font-size: 11px; font-weight: 700; text-transform: uppercase; white-space: nowrap; }
+        .bg-success { background: #d1fae5; color: #065f46; border: 1px solid #34d399; }
+        .bg-info { background: #dbeafe; color: #1e40af; border: 1px solid #60a5fa; }
+        .bg-warning { background: #fef3c7; color: #92400e; border: 1px solid #fbbf24; }
+        .bg-orange { background: #ffedd5; color: #9a3412; border: 1px solid #fb923c; }
+        .bg-danger { background: #fee2e2; color: #991b1b; border: 1px solid #f87171; }
+        .bg-purple { background: #f3e8ff; color: #6b21a8; border: 1px solid #d8b4fe; }
+
+        .diagnostico-text { font-size: 12px; color: var(--secondary); max-width: 280px; line-height: 1.4; }
+        .section-title { margin: 32px 0 16px; display: flex; align-items: center; gap: 8px; font-size: 18px; color: var(--text-main); border-bottom: 2px solid var(--border-color); padding-bottom: 8px; }
 
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         .fade-in { animation: fadeIn 0.4s forwards; }
         @keyframes spin { 100% { transform: rotate(360deg); } }
         .spin { animation: spin 1s linear infinite; }
-
-        /* Responsividade para manter os cards legíveis em telas menores */
-        @media (max-width: 1200px) {
-            .summary-grid { grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); }
-            .stat-card.critical { transform: scale(1.02); } /* Menos zoom no mobile */
-        }
     </style>
 </head>
 <body>
@@ -160,7 +183,7 @@
     <div class="container">
         <header class="page-header">
             <i class="ph-fill ph-truck"></i>
-            <h1>Conferência de Expedição J&T</h1>
+            <h1>Conferência e Investigação J&T</h1>
         </header>
 
         <div class="controls-section fade-in">
@@ -169,24 +192,24 @@
                     <i class="ph ph-file-xls"></i>
                     <span class="dropzone-title">1. Expedidos DC</span>
                     <span class="dropzone-filename" id="fileName1">Aguardando arquivo</span>
-                    <input type="file" id="fileInput1" accept=".xlsx, .xls">
+                    <input type="file" id="fileInput1" accept=".xlsx, .xls, .csv">
                 </label>
                 <label class="file-dropzone" for="fileInput2">
                     <i class="ph ph-barcode"></i>
                     <span class="dropzone-title">2. Recebido na Base</span>
                     <span class="dropzone-filename" id="fileName2">Aguardando arquivo</span>
-                    <input type="file" id="fileInput2" accept=".xlsx, .xls">
+                    <input type="file" id="fileInput2" accept=".xlsx, .xls, .csv">
                 </label>
-                <label class="file-dropzone" for="fileInput3">
-                    <i class="ph ph-steering-wheel"></i>
-                    <span class="dropzone-title">3. Bipagem Motorista</span>
-                    <span class="dropzone-filename" id="fileName3">Aguardando arquivo (Opcional)</span>
-                    <input type="file" id="fileInput3" accept=".xlsx, .xls">
+                <label class="file-dropzone optional" for="fileInput3">
+                    <i class="ph ph-magnifying-glass"></i>
+                    <span class="dropzone-title">3. Rastreio JMS</span>
+                    <span class="dropzone-filename" id="fileName3">Para investigar e separar extravios reais (Opcional)</span>
+                    <input type="file" id="fileInput3" accept=".xlsx, .xls, .csv">
                 </label>
             </div>
 
             <div class="status-badge" id="statusMessage">
-                <i class="ph ph-info"></i> Insira os relatórios para iniciar o cruzamento de dados.
+                <i class="ph ph-info"></i> Base referência: <b>F RVD - GO</b>. Insira os relatórios para iniciar.
             </div>
 
             <div class="actions-bar">
@@ -195,17 +218,17 @@
             </div>
         </div>
 
-        <div id="overallSummaryContainer" class="summary-grid">
-            </div>
+        <!-- Resumo Principal da Conferência -->
+        <h2 class="section-title fade-in" id="titleResumo" style="display:none;"><i class="ph-fill ph-chart-pie-slice"></i> Resumo da Conferência</h2>
+        <div id="overallSummaryContainer" class="summary-grid"></div>
 
         <div class="table-grid">
             
+            <!-- Tabela: Faltantes CRÍTICOS -->
             <div class="table-section critical-table fade-in" id="missingSection" style="display: none;">
                 <div class="table-header">
-                    <h2>🚨 ATENÇÃO: Expedido Não Chegou (Faltantes)</h2>
-                    <button id="copyButtonMissing" class="btn btn-action">
-                        <i class="ph ph-copy"></i> Copiar Lista
-                    </button>
+                    <h2>🚨 ATENÇÃO: Expedido Não Chegou a Lugar Nenhum (Faltantes)</h2>
+                    <button id="copyButtonMissing" class="btn btn-action"><i class="ph ph-copy"></i> Copiar Lista</button>
                 </div>
                 <div class="table-container">
                     <table id="missingTable">
@@ -215,23 +238,93 @@
                 </div>
             </div>
 
-            <div class="table-section fade-in" id="driverSection" style="display: none; animation-delay: 0.1s;">
+            <!-- NOVA Tabela: Sumiu no HUB GO GYN -->
+            <div class="table-section purple-table fade-in" id="hubMissingSection" style="display: none; animation-delay: 0.05s;">
                 <div class="table-header">
-                    <h2 style="color: var(--warning);"><i class="ph-fill ph-warning-circle"></i> Direto para Motorista</h2>
-                    <button id="copyButtonDriver" class="btn btn-action"><i class="ph ph-copy"></i> Copiar</button>
+                    <h2>🕳️ ALERTA CRÍTICO: Sumiu no HUB GO GYN</h2>
+                    <button id="copyButtonHubMissing" class="btn btn-action"><i class="ph ph-copy"></i> Copiar Lista</button>
                 </div>
                 <div class="table-container">
-                    <table>
-                        <thead><tr><th>Nº Remessa</th><th>Status</th></tr></thead>
-                        <tbody id="tableBodyDriver"></tbody>
+                    <table id="hubMissingTable">
+                        <thead><tr><th style="background-color: var(--purple-light); color: var(--purple-dark);">Nº Remessa Carregada no HUB e Extraviada</th></tr></thead>
+                        <tbody id="tableBodyHubMissing"></tbody>
                     </table>
                 </div>
             </div>
 
+            <!-- Tabela: Pulou Etapas -->
+            <div class="table-section fade-in" id="skippedSection" style="display: none; animation-delay: 0.1s;">
+                <div class="table-header">
+                    <h2 style="color: var(--warning);"><i class="ph-bold ph-fast-forward-circle"></i> Pulou Etapas (Identificado em Base, sem Recebimento)</h2>
+                    <button id="copyButtonSkipped" class="btn btn-action" style="background-color: white; border: 1px solid var(--border-color); color: var(--text-main);"><i class="ph ph-copy"></i> Copiar</button>
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead><tr><th>Nº Remessa</th><th>Último Status Encontrado na Base</th></tr></thead>
+                        <tbody id="tableBodySkipped"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Tabela: Bases Divergentes -->
+            <div class="table-section fade-in" id="divergentSection" style="display: none; animation-delay: 0.15s;">
+                <div class="table-header">
+                    <h2 style="color: var(--info);"><i class="ph-bold ph-arrows-split"></i> Recebidos em Outra Base (Divergente)</h2>
+                    <button id="copyButtonDivergent" class="btn btn-action" style="background-color: white; border: 1px solid var(--border-color); color: var(--text-main);"><i class="ph ph-copy"></i> Copiar</button>
+                </div>
+                <div class="table-container">
+                    <table>
+                        <thead><tr><th>Nº Remessa</th><th>Última Unidade Registrada</th></tr></thead>
+                        <tbody id="tableBodyDivergent"></tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- NOVA SEÇÃO: INVESTIGAÇÃO DOS FALTANTES -->
+            <div id="investigationContainer" style="display: none;">
+                <h2 class="section-title fade-in"><i class="ph-fill ph-magnifying-glass"></i> Investigação do Rastreio Completo</h2>
+                <div id="investigationSummaryContainer" class="summary-grid fade-in" style="grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); margin-bottom: 24px;">
+                    <!-- Cards de Investigação serão injetados aqui -->
+                </div>
+
+                <div class="table-section investigation-table fade-in" id="investigationSection">
+                    <div class="table-header">
+                        <h2><i class="ph-bold ph-list-magnifying-glass"></i> Detalhamento Operacional</h2>
+                        <button id="btnExportInvestigation" class="btn btn-action" style="background-color: var(--primary);"><i class="ph ph-download-simple"></i> Exportar Investigação</button>
+                    </div>
+                    <div class="filters-bar" id="investigationFilters">
+                        <button class="filter-btn active" data-filter="Todos">Todos</button>
+                        <button class="filter-btn" data-filter="Pulou Etapas">Pulou Etapas</button>
+                        <button class="filter-btn" data-filter="Entregue">Entregues</button>
+                        <button class="filter-btn" data-filter="Em Rota">Em Rota</button>
+                        <button class="filter-btn" data-filter="Localizado">Localizados</button>
+                        <button class="filter-btn" data-filter="Em Transferência">Em Transferência</button>
+                        <button class="filter-btn" data-filter="Sumiu no HUB">Sumiu no HUB GO GYN</button>
+                        <button class="filter-btn" data-filter="Sem Movimentação">Sem Movimentação</button>
+                    </div>
+                    <div class="table-container">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th>Remessa</th>
+                                    <th>Último Status</th>
+                                    <th>Última Unidade</th>
+                                    <th>Data/Hora</th>
+                                    <th>Situação Operacional</th>
+                                    <th>Diagnóstico</th>
+                                </tr>
+                            </thead>
+                            <tbody id="tableBodyInvestigation"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Tabela de Sobras -->
             <div class="table-section fade-in" id="unexpectedSection" style="display: none; animation-delay: 0.2s;">
                 <div class="table-header">
                     <h2 style="color: var(--success);"><i class="ph-fill ph-plus-circle"></i> Recebidos sem Expedição (Sobras)</h2>
-                    <button id="copyButtonUnexpected" class="btn btn-action"><i class="ph ph-copy"></i> Copiar</button>
+                    <button id="copyButtonUnexpected" class="btn btn-action" style="background-color: white; border: 1px solid var(--border-color); color: var(--text-main);"><i class="ph ph-copy"></i> Copiar</button>
                 </div>
                 <div class="table-container">
                     <table>
@@ -240,14 +333,14 @@
                     </table>
                 </div>
             </div>
-
         </div>
     </div>
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             
-            // Nomes dos arquivos no upload
+            const BASE_FIXA = 'F RVD - GO';
+
             ['1', '2', '3'].forEach(id => {
                 document.getElementById('fileInput' + id).addEventListener('change', (e) => {
                     const label = document.getElementById('fileName' + id);
@@ -259,10 +352,13 @@
                 });
             });
 
-            // Lógica
+            // Listas Globais
             let missingItemsList = [];
-            let directToDriverList = [];
+            let hubMissingList = [];
+            let divergentBaseList = [];
+            let skippedStepsList = [];
             let unexpectedItemsList = [];
+            let investigationData = [];
 
             const compareButton = document.getElementById('compareButton');
             const clearButton = document.getElementById('clearButton');
@@ -272,58 +368,370 @@
             clearButton.addEventListener('click', () => location.reload());
             
             document.getElementById('copyButtonMissing').addEventListener('click', function() { handleCopy(missingItemsList, this); });
-            document.getElementById('copyButtonDriver').addEventListener('click', function() { handleCopy(directToDriverList.map(i=>i.remessa), this); });
+            document.getElementById('copyButtonHubMissing').addEventListener('click', function() { handleCopy(hubMissingList, this); });
+            document.getElementById('copyButtonDivergent').addEventListener('click', function() { handleCopy(divergentBaseList.map(i=>i.remessa), this); });
+            document.getElementById('copyButtonSkipped').addEventListener('click', function() { handleCopy(skippedStepsList.map(i=>i.remessa), this); });
             document.getElementById('copyButtonUnexpected').addEventListener('click', function() { handleCopy(unexpectedItemsList, this); });
+
+            // Filtros de Investigação
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.addEventListener('click', function() {
+                    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                    this.classList.add('active');
+                    renderInvestigationTable(this.getAttribute('data-filter'));
+                });
+            });
+
+            document.getElementById('btnExportInvestigation').addEventListener('click', exportInvestigation);
 
             function handleCompare() {
                 const f1 = document.getElementById('fileInput1').files[0];
                 const f2 = document.getElementById('fileInput2').files[0];
-                const f3 = document.getElementById('fileInput3').files[0];
+                const f3 = document.getElementById('fileInput3').files[0]; 
 
                 if (!f1 || !f2) {
-                    statusMessage.innerHTML = `<i class="ph-fill ph-warning"></i> ERRO: Arquivos 1 e 2 são obrigatórios.`;
+                    statusMessage.innerHTML = `<i class="ph-fill ph-warning"></i> ERRO: Os arquivos 1 (Expedidos) e 2 (Recebidos) são obrigatórios.`;
                     statusMessage.style.borderColor = 'var(--danger)';
                     statusMessage.style.backgroundColor = 'var(--danger-light)';
                     statusMessage.style.color = 'var(--danger)';
                     return;
                 }
 
-                statusMessage.innerHTML = `<i class="ph ph-spinner spin"></i> Cruzando dados, aguarde...`;
+                statusMessage.innerHTML = `<i class="ph ph-spinner spin"></i> Processando inteligência de rastreio, aguarde...`;
                 statusMessage.style.borderColor = 'var(--primary)';
                 statusMessage.style.backgroundColor = '#f0f7ff';
                 statusMessage.style.color = 'var(--primary)';
                 compareButton.disabled = true;
 
-                Promise.all([readExcelFile(f1), readExcelFile(f2), f3 ? readExcelFile(f3) : Promise.resolve([])])
-                .then(([r1, r2, r3]) => {
-                    processData(r1, r2, r3);
-                    statusMessage.innerHTML = `<i class="ph-fill ph-check-circle"></i> Análise concluída com sucesso!`;
+                Promise.all([
+                    readExcelFile(f1), 
+                    readExcelFile(f2), 
+                    f3 ? readExcelFile(f3) : Promise.resolve([])
+                ])
+                .then(([r1, r2, rRastreio]) => {
+                    processAnalysis(r1, r2, rRastreio); 
+                    
+                    document.getElementById('titleResumo').style.display = 'flex';
+                    statusMessage.innerHTML = `<i class="ph-fill ph-check-circle"></i> Análise concluída com sucesso! Base referência: ${BASE_FIXA}.`;
                     statusMessage.style.borderColor = 'var(--success)';
                     statusMessage.style.backgroundColor = '#ecfdf5';
                     statusMessage.style.color = 'var(--success)';
                 })
-                .catch(() => {
-                    statusMessage.innerHTML = `<i class="ph-fill ph-warning"></i> Erro ao processar as planilhas.`;
+                .catch((e) => {
+                    console.error(e);
+                    statusMessage.innerHTML = `<i class="ph-fill ph-warning"></i> Erro ao processar as planilhas. Verifique os arquivos.`;
                 })
                 .finally(() => compareButton.disabled = false);
             }
 
-            function processData(rows1, rows2, rows3) {
+            function processAnalysis(rows1, rows2, rowsRastreio) {
                 const set1 = new Set(); rows1.forEach(r => { const val = filterRemessa(r[0]); if(val) set1.add(val); });
                 const set2 = new Set(); rows2.forEach(r => { const val = filterRemessa(r[0]); if(val) set2.add(val); });
-                const set3 = new Set(); rows3.forEach(r => { const val = filterRemessa(r[0]); if(val) set3.add(val); });
 
-                missingItemsList = []; directToDriverList = []; unexpectedItemsList = [];
+                let initialMissing = [];
+                missingItemsList = [];
+                hubMissingList = [];
+                divergentBaseList = [];
+                skippedStepsList = [];
+                unexpectedItemsList = [];
+                investigationData = [];
 
-                set1.forEach(remessa => {
-                    if (!set2.has(remessa) && !set3.has(remessa)) missingItemsList.push(remessa);
-                    else if (!set2.has(remessa) && set3.has(remessa)) directToDriverList.push({ remessa });
-                });
-
+                set1.forEach(remessa => { if (!set2.has(remessa)) initialMissing.push(remessa); });
                 set2.forEach(remessa => { if (!set1.has(remessa)) unexpectedItemsList.push(remessa); });
 
-                renderSummaryCards(set1.size, set2.size, directToDriverList.length, missingItemsList.length, unexpectedItemsList.length);
+                const hasRastreio = rowsRastreio && rowsRastreio.length > 0;
+
+                if (hasRastreio && initialMissing.length > 0) {
+                    
+                    const headers = rowsRastreio[0].map(h => String(h).toUpperCase());
+                    
+                    let remIdx = headers.findIndex(h => h.includes('PEDIDO') || h.includes('AWB'));
+                    if (remIdx === -1) remIdx = headers.findIndex(h => h.includes('REMESSA') || h.includes('CÓDIGO'));
+                    if (remIdx === -1) remIdx = 0; 
+                    
+                    let dateIdx = headers.findIndex(h => h.includes('DATA') || h.includes('HORA') || h.includes('TEMPO'));
+                    if (dateIdx === -1) dateIdx = 1; 
+
+                    let statIdx = headers.findIndex(h => h.includes('TIPO DE BIPAGEM') || h.includes('STATUS'));
+                    if (statIdx === -1) statIdx = headers.findIndex(h => h.includes('TIPO') || h.includes('EVENTO'));
+                    if (statIdx === -1) statIdx = headers.findIndex(h => h.includes('DESCRIÇÃO'));
+                    if (statIdx === -1) statIdx = 3; 
+
+                    let unitIdx = headers.findIndex(h => h.includes('UNIDADE') || h.includes('FILIAL') || h.includes('LOCAL') || h.includes('BASE'));
+                    if (unitIdx === -1) unitIdx = 5; 
+
+                    let trackingMap = {};
+                    for(let i = 1; i < rowsRastreio.length; i++) {
+                        const row = rowsRastreio[i];
+                        const remessa = filterRemessa(row[remIdx]);
+                        if(!remessa || !initialMissing.includes(remessa)) continue;
+
+                        if(!trackingMap[remessa]) trackingMap[remessa] = [];
+                        let timestamp = parseCustomDate(row[dateIdx]);
+                        
+                        trackingMap[remessa].push({
+                            status: String(row[statIdx] || '').trim(),
+                            unit: String(row[unitIdx] || '').trim(),
+                            dateStr: String(row[dateIdx] || ''),
+                            timestamp: timestamp,
+                            originalIndex: i
+                        });
+                    }
+
+                    initialMissing.forEach(remessa => {
+                        let events = trackingMap[remessa];
+                        
+                        if (!events || events.length === 0) {
+                            missingItemsList.push(remessa); 
+                            investigationData.push({ remessa, status: '-', unit: '-', date: '-', situacao: 'Sem Movimentação', classColor: 'bg-danger', diagnostico: 'Nenhum histórico encontrado no arquivo.' });
+                            return;
+                        }
+
+                        events.sort((a, b) => {
+                            if(a.timestamp !== b.timestamp) return a.timestamp - b.timestamp;
+                            return a.originalIndex - b.originalIndex;
+                        });
+
+                        const lastEvent = events[events.length - 1];
+                        let classificacao = classifyEvent(lastEvent.status, lastEvent.unit);
+                        const u = lastEvent.unit.toUpperCase();
+
+                        let isDivergent = false;
+                        if (u !== BASE_FIXA && !u.includes('GYN') && !u.includes('HUB')) {
+                            isDivergent = true;
+                        }
+
+                        let gynLoadFound = false;
+                        let hasRecebimentoRVD = false;
+                        let hasOtherRVD = false;
+
+                        for (let e of events) {
+                            let eu = e.unit.toUpperCase();
+                            let es = e.status.toLowerCase();
+
+                            if (eu.includes('GYN') && es.includes('carregamento')) {
+                                gynLoadFound = true;
+                                hasRecebimentoRVD = false; 
+                                hasOtherRVD = false;
+                            } else if (gynLoadFound && eu === BASE_FIXA) {
+                                if (es.includes('recebimento')) {
+                                    hasRecebimentoRVD = true;
+                                } else {
+                                    hasOtherRVD = true;
+                                }
+                            }
+                        }
+
+                        let isPulouEtapas = gynLoadFound && hasOtherRVD && !hasRecebimentoRVD;
+
+                        // Direcionamento para a lista correta
+                        if (classificacao.label === 'Sumiu no HUB') {
+                            hubMissingList.push(remessa); // SEPARANDO O HUB
+                        } else if (isPulouEtapas) {
+                            skippedStepsList.push({ remessa, status: lastEvent.status });
+                            classificacao = { label: 'Pulou Etapas', color: 'bg-warning', diag: 'Identificado em F RVD - GO após GO GYN, porém pulou o registro OFICIAL de Recebimento.' };
+                        } else if (isDivergent) {
+                            divergentBaseList.push({ remessa, unit: lastEvent.unit });
+                        } else {
+                            missingItemsList.push(remessa);
+                        }
+
+                        investigationData.push({
+                            remessa, status: lastEvent.status, unit: lastEvent.unit, date: lastEvent.dateStr,
+                            situacao: classificacao.label, classColor: classificacao.color, diagnostico: classificacao.diag
+                        });
+                    });
+
+                    renderInvestigationSummary();
+                    renderInvestigationTable('Todos');
+                    document.getElementById('investigationContainer').style.display = 'block';
+
+                } else {
+                    missingItemsList = [...initialMissing];
+                    document.getElementById('investigationContainer').style.display = 'none';
+                }
+
+                renderSummaryCards(set1.size, set2.size, missingItemsList.length, unexpectedItemsList.length, divergentBaseList.length, skippedStepsList.length, hubMissingList.length, hasRastreio);
                 renderTables();
+            }
+
+            function classifyEvent(status, unit) {
+                const s = status.toLowerCase();
+                const u = unit.toUpperCase();
+                
+                if (s.includes('assinatura') || s.includes('entregue') || s.includes('concluída')) {
+                    return { label: 'Entregue', color: 'bg-success', diag: 'Pacote entregue com sucesso.' };
+                }
+                if (s.includes('saída') || s.includes('saiu') || s.includes('distribuição')) {
+                    return { label: 'Em Rota', color: 'bg-info', diag: 'Pacote em posse do entregador.' };
+                }
+                if (s.includes('problemático') || s.includes('chegadas') || s.includes('descarga') || s.includes('recepção') || s.includes('recebimento')) {
+                    return { label: 'Localizado', color: 'bg-warning', diag: 'Pacote com registro interno identificado.' };
+                }
+                if (s.includes('carregamento') || s.includes('expedição') || s.includes('lote') || s.includes('carregada')) {
+                    if (u.includes('GO GYN') && s.includes('carregamento')) {
+                        return { label: 'Sumiu no HUB', color: 'bg-purple', diag: 'ALERTA: Pacote carregado no HUB e desaparecido desde então.' };
+                    }
+                    return { label: 'Em Transferência', color: 'bg-orange', diag: 'Pacote em transferência entre unidades ou aguardando processamento.' };
+                }
+                
+                return { label: 'Sem Movimentação', color: 'bg-danger', diag: 'Possível extravio ou falha operacional grave.' };
+            }
+
+            function parseCustomDate(val) {
+                if (!val) return 0;
+                if (typeof val === 'number') return (val - 25569) * 86400 * 1000;
+                let str = String(val).trim();
+                let match = str.match(/(\d{2})\/(\d{2})\/(\d{4})\s*(\d{2})?:?(\d{2})?:?(\d{2})?/);
+                if(match) return new Date(match[3], match[2]-1, match[1], match[4]||0, match[5]||0, match[6]||0).getTime();
+                
+                let matchIso = str.match(/(\d{4})-(\d{2})-(\d{2})\s*(\d{2})?:?(\d{2})?:?(\d{2})?/);
+                if(matchIso) return new Date(matchIso[1], matchIso[2]-1, matchIso[3], matchIso[4]||0, matchIso[5]||0, matchIso[6]||0).getTime();
+
+                let parsed = new Date(str).getTime();
+                return isNaN(parsed) ? 0 : parsed;
+            }
+
+            function renderInvestigationSummary() {
+                const total = investigationData.length;
+                const loc = investigationData.filter(i => i.situacao === 'Localizado').length;
+                const rota = investigationData.filter(i => i.situacao === 'Em Rota').length;
+                const ent = investigationData.filter(i => i.situacao === 'Entregue').length;
+                const skip = investigationData.filter(i => i.situacao === 'Pulou Etapas').length;
+                const hub = investigationData.filter(i => i.situacao === 'Sumiu no HUB').length;
+                const sem = investigationData.filter(i => i.situacao === 'Sem Movimentação').length;
+
+                document.getElementById('investigationSummaryContainer').innerHTML = `
+                    <div class="stat-card critical fade-in" style="transform:none; box-shadow:var(--shadow-sm);"><div class="stat-header">Total Investigado</div><div class="stat-value">${total}</div></div>
+                    <div class="stat-card warning fade-in"><div class="stat-header">Localizados</div><div class="stat-value">${loc}</div></div>
+                    <div class="stat-card info fade-in"><div class="stat-header">Em Rota</div><div class="stat-value">${rota}</div></div>
+                    <div class="stat-card success fade-in"><div class="stat-header">Entregues</div><div class="stat-value">${ent}</div></div>
+                    <div class="stat-card warning fade-in" style="background:#fffbeb; border-color:#fcd34d;"><div class="stat-header" style="color:#d97706;">Pulou Etapas</div><div class="stat-value" style="color:#d97706;">${skip}</div></div>
+                    <div class="stat-card purple fade-in"><div class="stat-header" style="color:var(--purple-dark); font-weight:700;">Sumiu GO GYN</div><div class="stat-value" style="color:var(--purple-dark);">${hub}</div></div>
+                    <div class="stat-card danger fade-in"><div class="stat-header">Sem Movimentação</div><div class="stat-value">${sem}</div></div>
+                `;
+            }
+
+            function renderInvestigationTable(filterType) {
+                const tbody = document.getElementById('tableBodyInvestigation');
+                let filtered = filterType === 'Todos' ? investigationData : investigationData.filter(i => i.situacao === filterType);
+
+                if (filtered.length === 0) {
+                    tbody.innerHTML = `<tr><td colspan="6"><div class="empty-state">Nenhum pacote se enquadra nesta classificação.</div></td></tr>`;
+                    return;
+                }
+
+                tbody.innerHTML = filtered.map(i => `
+                    <tr>
+                        <td class="td-mono">${i.remessa}</td>
+                        <td>${i.status}</td>
+                        <td>${i.unit}</td>
+                        <td>${i.date}</td>
+                        <td><span class="status-badge-inline ${i.classColor}">${i.situacao}</span></td>
+                        <td><div class="diagnostico-text" style="${i.situacao === 'Sumiu no HUB' ? 'color: var(--purple-dark); font-weight: 600;' : ''}">${i.diagnostico}</div></td>
+                    </tr>
+                `).join('');
+            }
+
+            function renderSummaryCards(monit, base, miss, unexp, div, skip, hub, hasRastreio) {
+                const hasMissing = miss > 0;
+                const missingCardClass = hasMissing ? "critical active-alert" : "critical"; 
+                const missingIcon = hasMissing ? "🚨" : "<i class='ph-fill ph-check-circle' style='color: var(--success);'></i>";
+                const missingColor = hasMissing ? "" : "color: var(--success);";
+                const missingText = hasMissing ? "FALTANTES" : "TUDO CERTO";
+
+                let extraCards = '';
+                if (hasRastreio) {
+                    const hasHub = hub > 0;
+                    const hubCardClass = hasHub ? "purple-critical active-alert" : "purple-critical"; 
+                    const hubIcon = hasHub ? "🕳️" : "<i class='ph-fill ph-check-circle' style='color: var(--purple-dark);'></i>";
+                    const hubColor = hasHub ? "" : "color: var(--purple-dark);";
+                    
+                    extraCards += `
+                    <div class="stat-card ${hubCardClass} fade-in">
+                        <div class="stat-header" style="${hubColor}">${hubIcon} SUMIU NO HUB GYN</div>
+                        <div class="stat-value" style="${hubColor}">${hub}</div>
+                    </div>`;
+
+                    extraCards += `<div class="stat-card info fade-in"><div class="stat-header"><i class="ph-bold ph-arrows-split"></i> Divergentes (Outras Bases)</div><div class="stat-value" style="color: var(--info);">${div}</div></div>`;
+                    extraCards += `<div class="stat-card warning fade-in"><div class="stat-header"><i class="ph-bold ph-fast-forward-circle"></i> Pulou Etapas na Base</div><div class="stat-value" style="color: var(--warning);">${skip}</div></div>`;
+                }
+
+                document.getElementById('overallSummaryContainer').innerHTML = `
+                    <div class="stat-card primary fade-in"><div class="stat-header"><i class="ph-bold ph-package"></i> Expedidos DC</div><div class="stat-value">${monit}</div></div>
+                    <div class="stat-card fade-in"><div class="stat-header"><i class="ph-bold ph-barcode"></i> Recebido Base RVD</div><div class="stat-value">${base}</div></div>
+                    
+                    <div class="stat-card ${missingCardClass} fade-in">
+                        <div class="stat-header" style="${missingColor}">${missingIcon} ${missingText}</div>
+                        <div class="stat-value" style="${missingColor}">${miss}</div>
+                    </div>
+                    ${extraCards}
+                    <div class="stat-card success fade-in"><div class="stat-header"><i class="ph-bold ph-plus-circle"></i> Sem Bipe do DC (Sobras)</div><div class="stat-value">${unexp}</div></div>
+                `;
+            }
+
+            function renderTables() {
+                // Faltantes Críticos
+                const secMissing = document.getElementById('missingSection');
+                const tbMissing = document.getElementById('tableBodyMissing');
+                secMissing.style.display = 'flex';
+                if (missingItemsList.length === 0) {
+                    secMissing.classList.remove('critical-table');
+                    tbMissing.innerHTML = `<tr><td><div class="empty-state"><i class="ph-fill ph-check-circle" style="color: var(--success); font-size: 40px;"></i> <strong>Operação Redonda!</strong> Nenhum pacote expedido ficou sem paradeiro justificável.</div></td></tr>`;
+                } else {
+                    secMissing.classList.add('critical-table');
+                    tbMissing.innerHTML = missingItemsList.map(i => `<tr><td class="td-mono" style="color: var(--danger-dark); font-size: 16px;">${i}</td></tr>`).join('');
+                }
+
+                // Sumiu no HUB GYN
+                const secHub = document.getElementById('hubMissingSection');
+                const tbHub = document.getElementById('tableBodyHubMissing');
+                if (hubMissingList.length > 0) {
+                    secHub.style.display = 'flex';
+                    tbHub.innerHTML = hubMissingList.map(i => `<tr><td class="td-mono" style="color: var(--purple-dark); font-size: 16px; font-weight: bold;">${i}</td></tr>`).join('');
+                } else {
+                    secHub.style.display = 'none';
+                }
+
+                // Pulou Etapas
+                const secSkip = document.getElementById('skippedSection');
+                const tbSkip = document.getElementById('tableBodySkipped');
+                if (skippedStepsList.length > 0) {
+                    secSkip.style.display = 'flex';
+                    tbSkip.innerHTML = skippedStepsList.map(i => `<tr><td class="td-mono">${i.remessa}</td><td><span style="color: var(--warning); font-weight: 600;">${i.status}</span></td></tr>`).join('');
+                } else {
+                    secSkip.style.display = 'none';
+                }
+
+                // Divergentes
+                const secDiv = document.getElementById('divergentSection');
+                const tbDiv = document.getElementById('tableBodyDivergent');
+                if (divergentBaseList.length > 0) {
+                    secDiv.style.display = 'flex';
+                    tbDiv.innerHTML = divergentBaseList.map(i => `<tr><td class="td-mono">${i.remessa}</td><td><span style="color: var(--info); font-weight: 600;">${i.unit}</span></td></tr>`).join('');
+                } else {
+                    secDiv.style.display = 'none';
+                }
+
+                // Sobras
+                document.getElementById('unexpectedSection').style.display = 'flex';
+                document.getElementById('tableBodyUnexpected').innerHTML = unexpectedItemsList.length === 0 ? `<tr><td><div class="empty-state">Nenhuma sobra registrada.</div></td></tr>` : unexpectedItemsList.map(i => `<tr><td class="td-mono" style="color: var(--success);">${i}</td></tr>`).join('');
+            }
+
+            function exportInvestigation() {
+                if (investigationData.length === 0) return;
+                const exportData = investigationData.map(i => ({
+                    'Remessa': i.remessa,
+                    'Último Status': i.status,
+                    'Última Unidade': i.unit,
+                    'Última Data': i.date,
+                    'Situação Operacional': i.situacao,
+                    'Diagnóstico': i.diagnostico
+                }));
+                const ws = XLSX.utils.json_to_sheet(exportData);
+                const wb = XLSX.utils.book_new();
+                XLSX.utils.book_append_sheet(wb, ws, "Investigacao_Faltantes");
+                XLSX.writeFile(wb, "Investigacao_Faltantes_J&T.xlsx");
             }
 
             function filterRemessa(val) {
@@ -342,50 +750,6 @@
                     reader.onerror = reject;
                     reader.readAsBinaryString(file);
                 });
-            }
-
-            function renderSummaryCards(monit, base, driv, miss, unexp) {
-                const hasMissing = miss > 0;
-                
-                // Se tiver faltante, ativa a classe que faz pulsar. Se não, fica como "success" (verde).
-                const missingCardClass = hasMissing ? "critical active-alert" : "critical"; 
-                const missingIcon = hasMissing ? "🚨" : "<i class='ph-fill ph-check-circle' style='color: var(--success);'></i>";
-                const missingColor = hasMissing ? "" : "color: var(--success);";
-                const missingText = hasMissing ? "FALTANTES IDENTIFICADOS" : "TUDO CERTO (ZERO FALTAS)";
-
-                document.getElementById('overallSummaryContainer').innerHTML = `
-                    <div class="stat-card primary fade-in"><div class="stat-header"><i class="ph-bold ph-package"></i> Expedidos DC</div><div class="stat-value">${monit}</div></div>
-                    <div class="stat-card fade-in"><div class="stat-header"><i class="ph-bold ph-barcode"></i> Recebido Base</div><div class="stat-value">${base}</div></div>
-                    
-                    <div class="stat-card ${missingCardClass} fade-in">
-                        <div class="stat-header" style="${missingColor}">${missingIcon} ${missingText}</div>
-                        <div class="stat-value" style="${missingColor}">${miss}</div>
-                    </div>
-
-                    <div class="stat-card warning fade-in"><div class="stat-header"><i class="ph-bold ph-steering-wheel"></i> Direto Motorista</div><div class="stat-value">${driv}</div></div>
-                    <div class="stat-card success fade-in"><div class="stat-header"><i class="ph-bold ph-plus-circle"></i> Sem Bipe do DC</div><div class="stat-value">${unexp}</div></div>
-                `;
-            }
-
-            function renderTables() {
-                const secMissing = document.getElementById('missingSection');
-                const tbMissing = document.getElementById('tableBodyMissing');
-                secMissing.style.display = 'flex';
-                
-                if (missingItemsList.length === 0) {
-                    secMissing.classList.remove('critical-table'); // Remove o vermelho da tabela se não tiver falta
-                    tbMissing.innerHTML = `<tr><td><div class="empty-state"><i class="ph-fill ph-check-circle" style="color: var(--success); font-size: 40px;"></i> <strong>Operação Redonda!</strong> Nenhum pacote expedido ficou para trás.</div></td></tr>`;
-                } else {
-                    secMissing.classList.add('critical-table'); // Pinta o header da tabela de vermelho
-                    tbMissing.innerHTML = missingItemsList.map(i => `<tr><td style="color: var(--danger-dark); font-weight: 700; font-size: 16px;">${i}</td></tr>`).join('');
-                }
-
-                // Renderiza as outras (Direto Motorista e Sobras)
-                document.getElementById('driverSection').style.display = 'flex';
-                document.getElementById('tableBodyDriver').innerHTML = directToDriverList.length === 0 ? `<tr><td colspan="2"><div class="empty-state">Nenhum pacote pulou a base.</div></td></tr>` : directToDriverList.map(i => `<tr><td><strong>${i.remessa}</strong></td><td><span style="color: var(--warning); font-weight: 600;">Identificado no Motorista</span></td></tr>`).join('');
-
-                document.getElementById('unexpectedSection').style.display = 'flex';
-                document.getElementById('tableBodyUnexpected').innerHTML = unexpectedItemsList.length === 0 ? `<tr><td><div class="empty-state">Nenhuma sobra registrada.</div></td></tr>` : unexpectedItemsList.map(i => `<tr><td style="color: var(--success); font-weight: 600;">${i}</td></tr>`).join('');
             }
 
             function handleCopy(list, btn) {
